@@ -9,7 +9,7 @@ function createSandBox(req, res) {
     sandBox.req = { };
     sandBox.sandbox = { };
 
-    sandBox.req.ip = req.ip;
+    sandBox.req.ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     sandBox.req.method = req.method;
     sandBox.req.originalUrl = req.originalUrl;
     sandBox.req.params = req.params;
