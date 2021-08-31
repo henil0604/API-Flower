@@ -5,7 +5,7 @@ const helperJs = require("@henil0604/helperjs");
 const path = require("path");
 var appRoot = require('app-root-path');
 
-let APIFile = {};
+let APIFile = { };
 
 function checksFolder() {
     const folderPath = path.join(
@@ -28,7 +28,7 @@ function parseCode(code) {
     return code;
 }
 
-APIFile.create = async (data = {}) => {
+APIFile.create = async (data = { }) => {
 
     try {
         const db = (await mongo()).useDb(env("MONGO_DBNAME"));

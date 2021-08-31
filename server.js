@@ -4,8 +4,11 @@ let app = require('./app');
 const env = require("./app/helpers/env");
 const RouterManager = require("./app/middlewares/RouterManager")
 const PORT = env("PORT") || 4141;
+const requestIp = require('request-ip');
 
 app.use(require("./app/middlewares/hit"));
+
+app.use(requestIp.mw())
 
 app = RouterManager(
     app,
