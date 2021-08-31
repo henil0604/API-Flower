@@ -4,17 +4,22 @@ const run = require("../helpers/run");
 
 function createSandBox(req, res) {
 
-    let sandBox = {};
+    let sandBox = { };
 
-    sandBox.req = {};
-    sandBox.res = {};
+    sandBox.req = { };
+    sandBox.sandbox = { };
 
     sandBox.req.ip = req.ip;
     sandBox.req.method = req.method;
     sandBox.req.originalUrl = req.originalUrl;
+    sandBox.req.params = req.params;
+    sandBox.req.query = req.query;
+    sandBox.req.body = req.body;
 
-    sandBox.request = require("request");
+    sandBox.fetch = require("node-fetch");
     sandBox.helperJs = require("@henil0604/helperjs");
+
+    sandBox.sandbox.APIid = req.params.id;
 
     return sandBox;
 }
@@ -22,7 +27,6 @@ function createSandBox(req, res) {
 module.exports = async (req, res) => {
 
     try {
-        let data = req.body;
         let id = req.params.id;
 
         const info = await APIFile.getInfo(id);
@@ -52,12 +56,8 @@ module.exports = async (req, res) => {
 
         let runReturn = await run(code, createSandBox(req, res))
 
-        if (runReturn) {
-            try {
-                JSON.parse(runReturn)
-            } catch (e) {
-                runReturn = runReturn.message
-            }
+        if (runReturn && runReturn.____RETURN_TYPE_VM__ == "error") {
+            runReturn = runReturn.e.message
         }
 
         return res.resolve(

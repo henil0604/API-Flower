@@ -1,23 +1,22 @@
 const VM = require('vm2').VM;
 
 
-module.exports = async (code, exposed = {}) => {
+module.exports = async (code, exposed = { }) => {
     return new Promise(async resolve => {
 
         let sandbox = {
-            console,
             setTimeout,
             setInterval,
             JSON,
             Math,
+            Date,
+            resolve: resolve,
             ...exposed
         }
         const vm = new VM({
-            console: 'inherit',
             timeout: 25000,
             showErrors: false,
             sandbox,
-            done: resolve
         });
 
         code = `
@@ -25,12 +24,15 @@ module.exports = async (code, exposed = {}) => {
                 try{
                     ${code}
                 }catch(e){
-                    return e;
+                    return {
+                        ____RETURN_TYPE_VM__: "error",
+                        e
+                    };
                 }
             })()
         `
 
-        const run = vm.run(code);
+        const run = await vm.run(code);
 
         resolve(run);
     })
