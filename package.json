@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@henil0604/helperjs": "^1.0.4",
+    "@now/node-server": "^0.8.2",
     "app-root-path": "^3.0.0",
     "body-parser": "^1.19.0",
     "chalk": "^4.1.2",
